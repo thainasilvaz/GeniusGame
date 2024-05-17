@@ -89,7 +89,6 @@ const padListener = (e) => { //chamada sempre que o jogador clica em um dos 4 pa
 		}
 		else if(currentMove === _data.gameSequence.length - 1){ //se acertou
 			newColor();
-			playSequence();
 		}
 	
 		waitForPlayerClick();
@@ -123,10 +122,11 @@ const newColor = () => {
 	_data.score++;
 	
 	setScore();
+	playSequence();
 }
 
 const playSequence = () => {
-	let counter = 0, 
+	let counter = 0,
 		padOn = true;
 
 	_data.playerSequence = [];
@@ -135,14 +135,14 @@ const playSequence = () => {
 	changePadCursor("auto"); //enquanto a sequencia estiver sendo executada o cursor do jogador será a setinha padrão
 
 	const interval = setInterval(() => {
-		if(!_data.gameOn){
+		if (!_data.gameOn) {
 			clearInterval(interval);
 			disablePads();
 			return;
 		}
 
-		if(padOn){
-			if(counter === _data.gameSequence.length){
+		if (padOn) {
+			if (counter === _data.gameSequence.length) {
 				clearInterval(interval);
 				disablePads();
 				waitForPlayerClick();
@@ -158,7 +158,7 @@ const playSequence = () => {
 			pad.classList.add("game__pad--active");
 			counter++;
 		}
-		else{
+		else {
 			disablePads();
 		}
 
@@ -168,29 +168,24 @@ const playSequence = () => {
 
 const blink = (text, callback) => {
 	let counter = 0,
-	on = true;
+		on = true;
 
-	_gui.counter.innerHTML = text;
+	_gui.counter.innerText = text;
 
 	const interval = setInterval(() => {
-		if(!_data.gameOn){ //se o jogo estiver desligado
+		if (!_data.gameOn) { //se o jogo estiver desligado
 			clearInterval(interval);
-			disablePads();
+			_gui.counter.classList.remove("gui__counter--on");
 			return; //impedindo que o código abaixo seja executado
 		}
 
-		if(!_data.gameOn){
-			clearInterval(interval);
-			_gui.counter.classList.remove("gui__counter--on");
-			return;
-		}
-		if(on){
+		if (on) {
 			_gui.counter.classList.remove("gui__counter--on");
 		}
-		else{
+		else {
 			_gui.counter.classList.add("gui__counter--on");
 
-			if(++counter === 3){
+			if (++counter === 3) {
 				clearInterval(interval);
 				callback();
 			}
@@ -200,29 +195,30 @@ const blink = (text, callback) => {
 	}, 250);
 }
 
+
 const waitForPlayerClick = () => {
 	clearTimeout(_data.timeout);
 
 	_data.timeout = setTimeout(() => {
-		if(!_data.playerCanPlay)//se o jogador não puder jogar
+		if (!_data.playerCanPlay) //se o jogador não puder jogar
 			return;
 
 		disablePads();
 		resetOrPlayAgain();
-	}, 5000); //5 segundos é o tempo para o jogador fazer sua jogada
+	}, 5000); //5 segundos é o tempo que o jogador tem para fazer sua jogada
 }
 
 const resetOrPlayAgain = () => {
 	_data.playerCanPlay = false;
 
-	if(_data.strict){ //se o modo strict estiver ativado
+	if (_data.strict) { //se o scrict estiver ativado
 		blink("!!", () => {
 			_data.score = 0;
 			_data.gameSequence = [];
 			startGame();
 		});
 	}
-	else{ //se o modo strict não estiver ativado
+	else { //se o scrict estiver desativado
 		blink("!!", () => {
 			setScore();
 			playSequence();
