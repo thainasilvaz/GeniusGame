@@ -27,3 +27,5 @@ Genius era um brinquedo muito popular na década de 1980. Distribuído pela Estr
   - setTimeout()
   - setInterval()
 
+link para acesso: https://geniusgame-tivit.netlify.app
+
